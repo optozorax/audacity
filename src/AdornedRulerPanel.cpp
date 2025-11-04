@@ -1147,49 +1147,10 @@ std::vector<UIHandlePtr> AdornedRulerPanel::QPCell::HitTest(
       #endif
    }
 
-   // Determine if looping (play region) is enabled
-   const auto &playRegion = ViewInfo::Get(*pProject).playRegion;
-   const bool loopingEnabled = playRegion.Active();
-
-   if (!loopingEnabled) {
-      // High priority hit is a handle to change the existing play region
-      bool hitLeft = false;
-      if ((hitLeft =
-           mParent->IsWithinMarker(xx, playRegion.GetLastActiveStart())) ||
-          mParent->IsWithinMarker(xx, playRegion.GetLastActiveEnd()))
-      {
-         auto result =
-            std::make_shared<ResizePlayRegionHandle>( mParent, xx, hitLeft );
-         result = AssignUIHandlePtr( mResizePlayRegionHolder, result );
-         results.push_back(result);
-      }
-
-      // Middle priority hit is a handle to change the existing play region at
-      // both ends, but only when the play region is active
-      if (auto time = mParent->Pos2Time(xx);
-          playRegion.Active() &&
-          time >= playRegion.GetStart() &&
-          time <= playRegion.GetEnd())
-      {
-         auto result =
-            std::make_shared<MovePlayRegionHandle>( mParent, xx );
-         result = AssignUIHandlePtr( mMovePlayRegionHolder, result );
-         results.push_back(result);
-      }
-
-      // Lowest priority hit is a handle to drag a completely new play region
-      {
-         auto result = std::make_shared<NewPlayRegionHandle>( mParent, xx );
-         result = AssignUIHandlePtr( mNewPlayRegionHolder, result );
-         results.push_back(result);
-      }
-   }
-   else {
-      // When looping is enabled, do not create or modify play regions with
-      // left-drag on the timeline. Instead, allow dragging to move playhead.
-      auto result = std::make_shared<SeekPlayheadHandle>( mParent, xx );
-      results.push_back(result);
-   }
+   // Always disable loop creation/adjustment via left-drag on timeline;
+   // instead, left-drag moves the playhead.
+   auto result = std::make_shared<SeekPlayheadHandle>( mParent, xx );
+   results.push_back(result);
 
    return results;
 }
