@@ -38,3 +38,4 @@ The most active Audacity user community can be found [in the forum](https://foru
 ### Making video tutorials
 
 Video tutorials are very helpful to users, as they tend to be easier to follow than written instructions. When you make video tutorials, make sure to mention which version of Audacity you're using, so that users know what the problem might be should they stumble upon your tutorial after a few years and find that their version of Audacity does very different things to yours.
+ 
