@@ -232,6 +232,7 @@ private:
    class MovePlayRegionHandle;
    class ResizePlayRegionHandle;
    class NewPlayRegionHandle;
+   class SeekPlayheadHandle;
    class ScrubbingHandle;
 
    class CommonCell;

@@ -879,7 +879,14 @@ private:
    Result Click(
       const TrackPanelMouseEvent &event, AudacityProject *pProject) override
    {
-      return CommonRulerHandle::Click(event, pProject);
+      auto res = CommonRulerHandle::Click(event, pProject);
+      if (mClicked == Button::Left && mParent) {
+         const auto time = mParent->Pos2Time(event.event.m_x);
+         auto &viewInfo = ViewInfo::Get(*pProject);
+         viewInfo.selectedRegion.setTimes(time, time);
+         mParent->UpdateQuickPlayPos(event.event.m_x);
+      }
+      return res;
    }
 
    Result Drag(
